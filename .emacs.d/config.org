@@ -1,0 +1,557 @@
+#+title: Personal Emacs Config
+#+author: Brandon Shega
+#+export_file_name: README
+* Table of Contents :TOC:noexport:
+- [[#general-settings][General Settings]]
+  - [[#personal][Personal]]
+  - [[#settings][Settings]]
+  - [[#display][Display]]
+  - [[#functions][Functions]]
+- [[#package-management][Package Management]]
+  - [[#straightel][Straight.el]]
+  - [[#use-package][Use Package]]
+- [[#theme][Theme]]
+- [[#packages][Packages]]
+  - [[#general][General]]
+  - [[#display-1][Display]]
+  - [[#languages][Languages]]
+  - [[#misc][Misc]]
+- [[#keybindings][Keybindings]]
+
+* General Settings
+** Personal
+#+begin_src emacs-lisp
+  (setq user-full-name "Brandon Shega"
+	user-mail-address "b.shega@gmail.com"
+	epa-file-encrypt-to user-mail-address)
+#+end_src
+
+** Settings
+#+begin_src emacs-lisp
+  (blink-cursor-mode 0)
+  (scroll-bar-mode 0)
+  (tool-bar-mode 0)
+  (tooltip-mode 0)
+  (setq inhibit-startup-screen t)
+  (cd "~/")
+
+  ;; custom file
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (when (file-exists-p custom-file)
+    (load custom-file))
+
+  ;; garbage collection
+  (setq gc-cons-threshold 402653184
+	gc-cons-percentage 0.6)
+  (add-hook 'after-init-hook
+	    `(lambda ()
+	       (setq gc-cons-threshold 800000
+		     gc-cons-percentage 0.1)
+	       (garbage-collect)) t)
+#+end_src
+** Display
+#+begin_src emacs-lisp
+  (global-hl-line-mode +1)
+
+  ;; line numbers
+  (global-display-line-numbers-mode +1)
+  (setq display-line-numbers-type 'relative)
+
+  ;; font
+  (set-frame-font "JetBrainsMono Nerd Font-12")
+#+end_src
+** Functions
+#+begin_src emacs-lisp
+  (defun find-config ()
+    "Edit config org file"
+    (interactive)
+    (find-file (expand-file-name "config.org" user-emacs-directory)))
+#+end_src
+
+* Package Management
+** Straight.el
+#+begin_src emacs-lisp
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	(bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+	  (url-retrieve-synchronously
+	   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	   'silent 'inhibit-cookies)
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+#+end_src
+
+** Use Package
+#+begin_src emacs-lisp
+  (setq straight-use-package-by-default t)
+  (straight-use-package 'use-package)
+#+end_src
+
+* Theme
+Load the current theme of the day
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :config
+    (load-theme 'doom-dracula t))
+
+  (use-package seoul256-theme
+    :disabled
+    :config
+    (load-theme 'seoul256 t))
+#+end_src
+* Packages
+** General
+*** Evil Leader
+#+begin_src emacs-lisp
+  (use-package evil-leader
+    :init (setq evil-want-C-u-scroll t)
+    :config
+    (global-evil-leader-mode)
+    (evil-leader/set-leader "<SPC>"))
+#+end_src
+
+*** Evil
+#+begin_quote
+Evil is an extensible vi layer for Emacs. It emulates the main features of Vim, and provides facilities for writing custom extensions.
+#+end_quote
+#+begin_src emacs-lisp
+  (use-package evil
+    :after evil-leader
+    :config
+    (evil-mode 1))
+#+end_src
+
+*** General
+#+begin_src emacs-lisp
+  (use-package general)
+#+end_src
+
+*** Projectile
+#+begin_src emacs-lisp
+  (use-package projectile
+    :config
+    (setq projectile-completion-system 'ivy
+	  projectile-cache-file (expand-file-name ".projectile-cache" user-emacs-directory)
+	  projectile-known-projects-file (expand-file-name ".projectile-bookmarks" user-emacs-directory))
+    (projectile-mode +1)
+    :custom
+    (projectile-enable-caching t))
+#+end_src
+    
+*** Ivy
+#+begin_src emacs-lisp
+  (use-package counsel
+    :init
+    (general-def
+      [remap apropos]                    #'counsel-apropos
+      [remap bookmark-jump]              #'counsel-bookmark
+      [remap compile]                    #'+ivy/compile
+      [remap describe-bindings]          #'counsel-descbinds
+      [remap describe-face]              #'counsel-faces
+      [remap describe-function]          #'counsel-describe-function
+      [remap describe-variable]          #'counsel-describe-variable
+      [remap evil-ex-registers]          #'counsel-evil-registers
+      [remap evil-show-marks]            #'counsel-mark-ring
+      [remap execute-extended-command]   #'counsel-M-x
+      [remap find-file]                  #'counsel-find-file
+      [remap find-library]               #'counsel-find-library
+      [remap imenu]                      #'counsel-imenu
+      [remap info-lookup-symbol]         #'counsel-info-lookup-symbol
+      [remap load-theme]                 #'counsel-load-theme
+      [remap locate]                     #'counsel-locate
+      [remap org-goto]                   #'counsel-org-goto
+      [remap org-set-tags-command]       #'counsel-org-tag
+      [remap projectile-compile-project] #'+ivy/project-compile
+      [remap recentf-open-files]         #'counsel-recentf
+      [remap set-variable]               #'counsel-set-variable
+      [remap swiper]                     #'counsel-grep-or-swiper
+      [remap unicode-chars-list-chars]   #'counsel-unicode-char
+      [remap yank-pop]                   #'counsel-yank-pop)
+    :config
+    (setf (alist-get 't ivy-format-functions-alist) #'ivy-format-function-line)
+    (setq ivy-use-virtual-buffers t
+	  ivy-re-builders-alist
+	  `((counsel-rf . ivy--regex-plus)
+	    (swiper . ivy--regex-plus)
+	    (swiper-isearch . ivy--regex-plus)
+	    (t . ivy--regex-plus))
+	  ivy-more-chars-alist
+	  `((counsel-rg . 1)
+	    (counsel-search . 2)
+	    (t . 3))
+	  ivy-magic-slash-non-match-action nil
+	  ivy-use-virtual-buffers nil
+	  ivy-virual-abbreviate 'full
+	  ivy-use-selectable-prompt t
+	  counsel-find-file-ignore-regexp "\\(?:^[#.]\\)\\|\\(?:[#~]$\\)\\|\\(?:^Icon?\\)"
+	  ivy-height 17
+	  ivy-fixed-height-minibuffer t
+	  ivy-wrap t
+	  ivy-count-format "%d/%d ")
+    (ivy-mode t))
+
+  (use-package ivy-rich
+    :after ivy
+    :config
+    (ivy-rich-mode +1))
+
+  (use-package counsel-projectile
+    :init
+    (general-def
+      [remap projectile-find-file]        #'counsel-projectile-find-file
+      [remap projectile-find-dir]         #'counsel-projectile-find-dir
+      [remap projectile-switch-to-buffer] #'counsel-projectile-switch-to-buffer
+      [remap projectile-grep]             #'counsel-projectile-grep
+      [remap projectile-ag]               #'counsel-projectile-ag
+      [remap projectile-switch-project]   #'counsel-projectile-switch-project))
+
+  (use-package flx
+    :init (setq ivy-flx-limit 10000))
+
+  (use-package all-the-icons-ivy
+    :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)
+    :after ivy
+    :config
+    (setq all-the-icons-ivy-file-commands
+     '(counsel-find-file
+       counsel-recentf
+       counsel-projectile
+       counsel-projectile-find-file
+       counsel-projectile-find-dir)))
+#+end_src
+
+*** Which Key
+#+begin_quote
+Emacs package that displays available keybindings in popup
+#+end_quote
+#+begin_src emacs-lisp
+  (use-package which-key
+    :config
+    (which-key-mode))
+#+end_src
+
+*** Magit
+#+begin_src emacs-lisp
+  (use-package magit
+    :config
+    (setq magit-diff-refine-hunk t
+	  magit-save-repository-buffers nil
+	  magit-git-executable (executable-find magit-git-executable)))
+#+end_src
+
+*** LSP
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :hook
+    ((typescript-mode . lsp-deferred)
+     (js2-mode . lsp-deferred)
+     (web-mode . lsp-deferred)
+     (lsp-mode . lsp-enable-which-key-integration))
+    :commands lsp lsp-deferred)
+
+  (use-package lsp-ui
+    :commands lsp-ui-mode)
+
+  (use-package lsp-ivy
+    :commands lsp-ivy-workspace-symbol)
+
+  (use-package dap-mode)
+#+end_src
+*** Company
+#+begin_src emacs-lisp
+  (use-package company
+    :bind
+    (:map company-active-map
+	  ("TAB" . company-complete-common-or-cycle)
+	  ([tab] . company-complete-common-or-cycle)
+	  ("C-n" . company-select-next)
+	  ("C-p" . company-select-previous)
+	  ("C-j" . company-select-next)
+	  ("C-k" . company-select-previous)
+	  ("C-u" . company-previous-page)
+	  ("C-d" . company-next-page)
+	  ("C-s" . company-filter-candidates)
+	  ([escape] . company-search-abort)
+	  ("ESC" . company-search-abort))
+    :hook
+    (after-init . global-company-mode)
+    :custom
+    (company-idle-delay 0.0)
+    (company-minimum-prefix-length 1)
+    (company-require-match nil)
+    (company-tooltip-align-annotations))
+#+end_src
+*** Flycheck
+#+begin_src emacs-lisp
+    (use-package flycheck
+      :hook
+      (after-init . global-flycheck-mode)
+  ;    ((css-mode . flycheck-mode)
+  ;     (emacs-lisp-mode . flycheck-mode)
+  ;     (js-mode . flycheck-mode)
+  ;     (typescript-mode .flycheck-mode)
+  ;     (js2-mode . flycheck-mode))
+      :custom
+      (flycheck-display-errors-delay .3)
+      (flycheck-add-next-checker 'lsp-ui 'typescript-tslint))
+#+end_src
+** Display
+*** Doom Modeline
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :config
+    (doom-modeline-mode 1))
+#+end_src
+*** All the icons
+#+begin_src emacs-lisp
+  (use-package all-the-icons)
+#+end_src
+*** Rainbow Delimiters
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :hook ((prog-mode org-mode) . rainbow-delimiters-mode))
+#+end_src
+** Languages
+*** CSS
+#+begin_src emacs-lisp
+  (use-package css-mode
+    :ensure nil
+    :custom (css-indent-offset 2))
+
+  (use-package scss-mode
+    :ensure nil
+    :preface
+    (defun me/scss-set-comment-style ()
+      (setq-local comment-end "")
+      (setq-local comment-start "//"))
+    :mode ("\\.sass\\'" "\\.scss\\'")
+    :hook (scss-mode . me/scss-set-comment-style))
+#+end_src
+
+*** HTML
+#+begin_src emacs-lisp
+  (use-package emmet-mode
+    :hook (css-mode web-mode html-mode)
+    :config
+    (setq emmet-move-cursor-between-quotes t))
+
+  (use-package web-mode
+    :mode "\\.[px]?html?\\'"
+    :config
+    (setq web-mode-enable-html-entities-fortification t
+	  web-mode-auto-close-style 1))
+#+end_src
+
+*** Javascript
+#+begin_src emacs-lisp
+  (use-package js
+    :ensure nil
+    :custom
+    (js-indent-level 2))
+
+  (use-package js2-mode
+    :ensure nil
+    :mode "\\.js\\'")
+
+  (use-package json-mode
+    :mode "\\.json\\'"
+    :preface
+    (defun me/json-set-indent-level ()
+      (setq-local js-indent-level 2))
+    :hook (json-mode . me/json-set-indent-level))
+
+  (use-package prettier-js
+    :config
+    :hook js2-mode)
+
+  (use-package js-doc)
+#+end_src
+
+*** Markdown
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+	   ("\\.md\\'" . markdown-mode)
+	   ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
+#+end_src
+*** Typescript
+#+begin_src emacs-lisp
+  (use-package typescript-mode)
+#+end_src
+** Misc
+#+begin_src emacs-lisp
+  (use-package toc-org
+    :hook
+    (org-mode . toc-org-mode)
+    (markdown-mode . toc-org-mode))
+
+  (use-package ox-gfm
+    :after org)
+
+  (use-package exec-path-from-shell
+    :init
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)))
+
+  (use-package add-node-modules-path
+    :hook
+    (js-mode . add-node-modules-path)
+    (typescript-mode . add-node-modules-path))
+
+  (use-package minibuffer
+    :ensure nil
+    :preface
+    (defun me/minibuffer-setup-hook ()
+      (setq gc-cons-threshold most-positive-fixnum))
+    (defun me/minibuffer-exit-hook ()
+      (setq gc-cons-threshold 800000))
+    :hook
+    (minibuffer-setup . me/minibuffer-setup)
+    (minibuffer-exit . me/minibuffer/exit))
+#+end_src
+* Keybindings
+Minimap configuration
+#+begin_src emacs-lisp
+  (defvar +default-minibuffer-maps
+    (append '(minibuffer-local-map
+	      minibuffer-local-ns-map
+	      minibuffer-local-completion-map
+	      minibuffer-local-must-match-map
+	      minibuffer-local-isearch-map
+	      read-expression-map
+	      ivy-minibuffer-map
+	      ivy-switch-buffer-map)))
+  (general-define-key
+   :keymaps +default-minibuffer-maps
+   [escape] 'abort-recursive-edit
+   "C-j" 'next-line
+   "C-k" 'previous-line)
+#+end_src
+Leader Keybinds
+#+begin_src emacs-lisp
+  ;; <leader>
+  (general-def
+    :prefix "SPC"
+    :states '(normal visual emacs)
+    :keymaps 'override
+    ";" 'eval-expression
+    ":" 'execute-extended-command
+    "X" 'org-capture
+    "." 'find-file
+    "," 'switch-to-buffer
+    "*" 'counsel-rg
+    "SPC" 'projectile-find-file
+    "TAB" 'mode-line-other-buffer
+    ;; <leader> b --- buffers
+    "b" '(:ignore t :wk "buffers")
+    "bb" 'switch-to-buffer
+    "b[" 'previous-buffer
+    "b]" 'next-buffer
+    "bk" 'kill-this-buffer
+    "bn" 'next-buffer
+    "bp" 'previous-buffer
+    ;; <leader> f --- files
+    "f" '(:ignore t :wk "files")
+    "ff" 'find-file
+    "fd" 'dired
+    "fr" 'recentf-open-files
+    "fR" 'projectile-recentf
+    "fs" 'save-buffer
+    "fp" 'find-config
+    ;; <leader> g --- git
+    "g" '(:ignore t :wk "git")
+    "g/" 'magit-dispatch
+    "gg" 'magit-status
+    "gB" 'magit-blame-addition
+    "gF" 'magit-fetch
+    "gL" 'magit-log
+    "gS" 'magit-stage-file
+    "gU" 'magit-unstage-file
+    "gc" '(:ignore t :wk "create")
+    "gcr" 'magit-init
+    "gcR" 'magit-clone
+    "gcc" 'magit-commit-crate
+    "gci" 'forge-create-issue
+    "gcp" 'forge-create-pullreq
+    "gf" '(:ignore t :wk "find")
+    "gff" 'magit-find-file
+    "gfg" 'magit-find-git-config-file
+    "gfc" 'magit-show-commit
+    "gfi" 'forge-visit-issue
+    "gfp" 'forge-visit-pullreq
+    "gl" '(:ignore t :wk "list")
+    "glr" 'magit-list-repositories
+    "gls" 'magit-list-submodules
+    "gli" 'forge-list-issues
+    "glp" 'forge-list-pullreqs
+    "gln" 'forge-list-notifications
+    "go" '(:ignore t :wk "open in browser")
+    "gor" 'forge-browse-remote
+    "goc" 'forge-browse-commit
+    "goi" 'forge-browse-issue
+    "gop" 'forge-browse-pullreq
+    "goI" 'forge-browse-issues
+    "goP" 'forge-browse-pullreqs
+    ;; <leader> h --- help
+    "h" '(:ignore t :wk "help")
+    "hi" 'info
+    "hl" 'counsel-find-library
+    "hI" 'info-display-manual
+    "hd" '(:ignore t :wk "describe")
+    "hdB" 'evil-collection-describe-bindings
+    "hdc" 'describe-char
+    "hdf" 'counsel-describe-function
+    "hdg" 'general-describe-keybindings
+    "hdk" 'describe-key
+    "hdm" 'describe-mode
+    "hdp" 'describe-package
+    "hds" 'counsel-info-lookup-symbol
+    "hdt" 'describe-theme
+    "hdu" 'counsel-unicode-char
+    "hdv" 'counsel-describe-variable
+    ;; <leader> p --- projects
+    "p" '(:ignore t :wk "projects")
+    "pp" 'projectile-switch-project
+    "pf" 'projectile-find-file
+    "!" 'projectile-run-shell-command-in-root
+    "pa" 'projectile-add-known-project
+    "pd" 'projectile-remove-known-project
+    "pi" 'projectile-invalidate-cache
+    "pk" 'projectile-kill-buffers
+    "po" 'projectile-find-other-file
+    "pr" 'projectile-recentf
+    "ps" 'projectile-save-project-buffers
+    ;; <leader> q --- quit/session
+    "q" '(:ignore t :wk "quit/session")
+    "qf" 'delete-frame
+    "qK" 'save-buffers-kill-emacs
+    "qq" 'save-buffers-kill-terminal
+    "qQ" 'evil-quit-all-with-error-code
+    ;; <leader> s --- search
+    "s" '(:ignore t :wk "search")
+    "sb" 'swiper
+    "sf" 'locate
+    "si" 'imenu
+    "ss" 'swiper-isearch
+    "sS" 'swiper-isearch-thing-at-point
+    ;; <leader> w --- window
+    "w" '(:ignore t :wk "window")
+    "wv" 'evil-window-vsplit
+    "ws" 'evil-window-split)
+#+end_src
+Misc keybinds
+#+begin_src emacs-lisp
+  (general-def
+    :states '(normal visual emacs)
+    :keymaps 'override
+    "C-h" 'evil-window-left
+    "C-j" 'evil-window-down
+    "C-k" 'evil-window-up
+    "C-l" 'evil-window-right)
+#+end_src

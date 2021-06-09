@@ -1,0 +1,6 @@
+{
+  "tsserver.npm": "/usr/local/bin/npm",
+  "coc.preferences.formatOnSaveFiletypes": ["javascript", "typescript"],
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "prettier.disableSuccessMessage": true
+}

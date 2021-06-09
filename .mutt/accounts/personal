@@ -1,0 +1,23 @@
+# set imap_user = "b.shega@gmail.com"
+# set imap_pass = `imap-pass -g b.shega@gmail.com`
+# set smtp_url = "smtp://b.shega@gmail.com@smtp.gmail.com:587/"
+# set smtp_pass = `imap_pass -g b.shega@gmail.com`
+# set from = "b.shega@gmail.com"
+# set realname = "Brandon Shega"
+# 
+# set folder = "imaps://imap.gmail.com:993"
+# set spoolfile = "+INBOX"
+# set postponed = "+Drafts"
+# set record = "+Sent Mail"
+# set hostname = gmail.com
+
+set from = "b.shega@icloud.com"
+set hostname = "icloud.com"
+set folder = "~/mail/personal"
+# set signature = ~/.personal-signature
+set sendmail = "/usr/local/bin/msmtp -a personal"
+
+set spoolfile = "+Inbox"
+set postponed = "+Drafts"
+set record = "+Sent Messages"
+set trash = "+Trash"

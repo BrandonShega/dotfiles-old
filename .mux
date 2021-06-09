@@ -1,0 +1,15 @@
+#vim: ft=sh
+
+[ -z "$name" ] && return 1
+
+tmux split-window -h \; \
+  rename-window -t $name:1 Main \; \
+  new-window -a -d -n Misc -t $name:1 \; \
+  new-window -a -d -n Alexa -t $name:1 \; \
+  new-window -a -d -n iOS -t $name:1 \; \
+  new-window -a -d -n Rails -t $name:1 \; \
+  send-keys -t $name:1.1 'wtf' C-m \; \
+  send-keys -t $name:2 'z rails' C-m \; \
+  send-keys -t $name:2 'ss' C-m \; \
+  send-keys -t $name:3 'z ios' C-m \; \
+  send-keys -t $name:4 'z smart home' C-m

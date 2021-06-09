@@ -1,0 +1,22 @@
+# set imap_user = "brandon.shega@fbgpg.com"
+# set imap_pass = `imap-pass -g brandon.shega@moen.com`
+# set smtp_url = "smtp://b.shega@gmail.com@hqexcas.moen.com"
+# set smtp_pass = `imap_pass -g brandon.shega@moen.com`
+# set from = "brandon.shega@fbgpg.com"
+# set realname = "Brandon Shega"
+# 
+# set folder = "imaps://hqexcas.moen.com"
+# set spoolfile = "+INBOX"
+# set postponed = "+Drafts"
+# set record = "+Sent Mail"
+
+set from = "brandon.shega@fbgpg.com"
+set hostname = "fbgpg.com"
+set folder = "~/mail/work"
+# set signature = "~/.work-signature"
+set sendmail = "/usr/local/bin/msmtp -a work"
+
+set spoolfile = "+Inbox"
+set postponed = "+Drafts"
+set record = "+Sent"
+set trash = "+Trash"

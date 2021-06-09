@@ -1,0 +1,24 @@
+# /Users/bshega/.config/tmuxinator/degreed.yml
+
+name: degreed
+root: ~/Documents/dev/Degreed/trunk/
+
+windows:
+  - code:
+      layout: main-horizontal
+      panes:
+        - vim:
+          - cd Degreed.Web
+          - vim
+        - watch:
+          - cd Degreed.Web
+          - npm start
+        - watch-ops:
+          - cd Degreed.Web
+  - backend:
+      layout: tiled
+      panes:
+        - build:
+          - cd Degreed.Web
+          - npm run gulp dg.bw
+  - htop: htop

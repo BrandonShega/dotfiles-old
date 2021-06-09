@@ -1,0 +1,20 @@
+alias l="ls -F -G -lah"
+alias ll="ls -l"
+alias la="ls -a"
+alias lsd='ls -ld *(-/DN)'
+alias md='mkdir -p'
+alias rd='rmdir'
+alias cd..='cd ..'
+alias ..='cd ..'
+alias groutes='rake routes | grep $@'
+alias log="git log --no-merges --name-only"
+alias gprev="git diff -w HEAD"
+alias gprevs="git diff -w --staged HEAD"
+alias ec='emacsclient -c -n -a ""'
+alias e='emacsclient -t -a ""'
+alias mux=tmuxinator
+alias ue='cd ~/.emacs.d && git pull origin develop'
+
+if command -v nvim 2>&1 >/dev/null; then
+  alias vim='nvim'
+fi
