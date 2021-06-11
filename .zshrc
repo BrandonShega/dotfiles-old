@@ -134,9 +134,6 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     xcape -e 'Caps_Lock=Escape'
 fi
 
-# Z
-. $HOME/.zsh/z/z.sh
-
 command -v brew > /dev/null && [[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
 
 # tabtab source for serverless package
