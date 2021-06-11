@@ -107,9 +107,6 @@ cdpath=(~ ~/src $DEV_DIR $SOURCE_DIR)
 typeset -aU path
 
 # Sources
-source $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $HOME/.sharedrc
 source $HOME/.zsh/aliases
 source $HOME/.zsh/exports
 source $HOME/.zsh/functions
