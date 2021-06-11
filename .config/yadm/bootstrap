@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# Initialize submodules
+cd "$HOME"
+
+echo 'Init submodules'
+yadm submodule update --recursive --init
+
+# Install Homebrew
+system_type=$(uname -s)
+
+if [ "$system_type" = "Darwin" ]; then
+
+  if ! command -v brew >/dev/null 2>&1; then
+    echo "Installing Homebrew"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+
+  if [ -f "$HOME/Brewfile" ]; then
+    echo "Installing Homebrew bundle"
+    brew bundle --global
+  fi
+
+fi
+
+# Install Zplug
+
+if ! command -v zplug >/dev/null 2>&1; then
+  echo "Installing zplug"
+  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+fi
+
+# Configure iTerm2
+
+if [ "$system_type" = "Darwin" ]; then
+
+  if [ -d /Applications/iTerm.app ]; then
+    echo "Installing iTerm2"
+    brew cask install iterm2
+  fi
+
+  if [ -d "$HOME/.iterm2" ]; then
+    echo "Setting iTerm preferences"
+    defaults write com.googlecode.iterm2 PrefsCustomFolder "$HOME/.iterm2"
+  fi
+fi
+
+# Install Vim plugins
+
+if command -v vim >/dev/null 2>&1; then
+  echo "Bootstrapping Vim"
+  vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
+fi
