@@ -21,7 +21,7 @@ git clone https://github.com/hlissner/doom-emacs.git ~/.emacs.d
 ** Fonts
 The font I use is JetBrains' Mono which can be downloaded [[https://www.jetbrains.com/lp/mono/][here]]
 #+BEGIN_SRC emacs-lisp
-(setq doom-font (font-spec :family "JetBrains Mono" :size 12))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 12))
 #+END_SRC
 
 ** Theme
@@ -99,7 +99,7 @@ The font I use is JetBrains' Mono which can be downloaded [[https://www.jetbrain
 ** Swift
 #+BEGIN_SRC emacs-lisp
 (after! lsp-mode
-  (setq lsp-sourcekit-executable "/opt/swift/usr/bin/sourcekit-lsp"))
+  (setq lsp-sourcekit-executable "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))
 #+END_SRC
 * Org Mode Settings
 ** Agenda

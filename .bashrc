@@ -1,7 +1,7 @@
 # ~/.bashrc
 # vim:set ft=sh sw=2 sts=2:
 
-source "$HOME/.sharedrc"
+# source "$HOME/.sharedrc"
 
 # Store 10,000 history entries
 export HISTSIZE=10000
@@ -10,7 +10,7 @@ export HISTCONTROL=erasedups
 # Append to history file
 shopt -s histappend
 
-VISUAL=vim
+VISUAL=emacsclient -t
 EDITOR="$VISUAL"
 LESS="FRX"
 RI="--format ansi -T"
@@ -50,10 +50,10 @@ fi
 #
 alias reload='source ~/.bash_profile; echo -e "\n\u2699  \033[0;33mBASH config reloaded\033[0m \u2699"'
 
+[ ! -f "$HOME/.bashrc.local" ] || . "$HOME/.bashrc.local"
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-[ ! -f "$HOME/.bashrc.local" ] || . "$HOME/.bashrc.local"

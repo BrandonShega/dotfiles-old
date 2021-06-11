@@ -29,7 +29,6 @@ nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
 nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
 nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 if exists('*complete_info')
   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 else

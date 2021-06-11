@@ -70,7 +70,7 @@ setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
 
 # Plugins
-plugins=(rails git ruby bundler vi-mode)
+plugins=(rails git ruby bundler vi-mode z)
 
 # Functions
 l.() {

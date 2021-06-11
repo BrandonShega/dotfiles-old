@@ -3,7 +3,7 @@ let g:python3_host_prog = '/Users/brandonshega/.pyenv/versions/neovim3/bin/pytho
 
 runtime! vim-plug/plugins.vim
 runtime! themes/dracula.vim
-runtime! plugin-config/*.vim
 runtime! general/*.vim
 runtime! keys/*.vim
+runtime! plugin-config/*.vim
 
