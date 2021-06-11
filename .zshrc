@@ -115,6 +115,7 @@ source $HOME/.zsh/exports
 source $HOME/.zsh/functions
 source $HOME/.zsh/function.sh
 source $HOME/.zsh/key-binding.zsh
+source $HOME/.zsh/fzf
 source $ZSH/oh-my-zsh.sh # Oh-My-ZSH
 
 # External
@@ -127,6 +128,10 @@ if [[ -s "$HOME/.asdf/asdf.sh" ]] ; then source "$HOME/.asdf/asdf.sh" ; fi # ASD
 if [[ -s "$HOME/.asdf/asdf.bash" ]] ; then source "$HOE/asdf/asdf.bash" ; fi # ASDF
 if [[ -s "$HOME/.asdf/completions/asdf.sh" ]] ; then source "$HOME/.asdf/completions/asdf.sh" ; fi # ASDF
 if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then source "$HOME/.rvm/scripts/rvm" ; fi # RVM
+
+if which rbenv > /dev/null;
+    then eval "$(rbenv init -)";
+fi
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     xcape -e 'Caps_Lock=Escape'
@@ -146,3 +151,8 @@ command -v brew > /dev/null && [[ -s $(brew --prefix)/etc/profile.d/autojump.sh 
 
 # FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# ZPLUG
+export ZPLUG_HOME=/usr/local/opt/zplug
+source $ZPLUG_HOME/init.zsh
+zplug "wfxr/forgit"
