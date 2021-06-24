@@ -16,3 +16,5 @@ PATH=/opt/swift/usr/bin:$PATH
 
 zrcl="$HOME/.zshenv.local"
 [[ ! -a $zrcl ]] || source $zrcl
+
+PATH=$HOME/Downloads/crontest-master:$PATH
