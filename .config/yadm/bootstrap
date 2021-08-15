@@ -36,7 +36,7 @@ if [ "$system_type" = "Darwin" ]; then
 
   if [ -d /Applications/iTerm.app ]; then
     echo "Installing iTerm2"
-    brew cask install iterm2
+    brew install iterm2
   fi
 
   if [ -d "$HOME/.iterm2" ]; then
