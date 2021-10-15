@@ -101,6 +101,7 @@ The font I use is JetBrains' Mono which can be downloaded [[https://www.jetbrain
 (after! lsp-mode
   (setq lsp-sourcekit-executable "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))
 #+END_SRC
+
 * Org Mode Settings
 ** Agenda
 #+BEGIN_SRC emacs-lisp
@@ -285,15 +286,12 @@ The font I use is JetBrains' Mono which can be downloaded [[https://www.jetbrain
 
 ** JIRA
 #+BEGIN_SRC emacs-lisp
-(setq jiralib-url "https://gpgdigital.atlassian.net/")
+(setq jiralib-url "https://jira.godaddy.com/")
 #+END_SRC
+
 * GitHub Settings
 ** Forge
 #+BEGIN_SRC emacs-lisp
-(after! forge
-  (push '("git.moen.com" "git.moen.com/api/v3"
-          "git.moen.com" forge-github-repository)
-        forge-alist))
 (setq ghub-use-workaround-for-emacs-bug 'force)
 #+END_SRC
 
