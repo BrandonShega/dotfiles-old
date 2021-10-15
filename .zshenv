@@ -12,9 +12,8 @@ PATH=/usr/local/opt/openssl/bin:$PATH
 PATH=$HOME/.emacs.d/bin:$PATH
 PATH=$HOME/go/bin:$PATH
 PATH=$HOME/.pyenv/bin:$PATH
+PATH=$HOME/.pyenv/shims:$PATH
 PATH=/opt/swift/usr/bin:$PATH
 
 zrcl="$HOME/.zshenv.local"
 [[ ! -a $zrcl ]] || source $zrcl
-
-PATH=$HOME/Downloads/crontest-master:$PATH

@@ -43,7 +43,7 @@ alias gpr='git pull --rebase'
 alias gr='git rebase'
 alias gra='git rebase --abort'
 alias grc='git rebase --continue'
-alias grim='git rebase -i master'
+alias grim='git rebase -i main'
 alias gst='git status'
 alias reset-authors='git commit --amend --reset-author -C HEAD'
 
@@ -60,6 +60,7 @@ fi
 # Misc
 #
 alias spacer="defaults write com.apple.dock persistent-apps -array-add '{\"tile-type\"=\"spacer-tile\";}'; killall Dock"
+alias cdd="rm -rf ~/Library/Developer/Xcode/DerivedData"
 
 # Shortcuts
 alias swiftgen="swiftgen config run --config .swiftgen.yml"
