@@ -13,6 +13,10 @@ FILES
 .config/NuGet
 .config/Microsoft\\VisualStudio Services
 .config/.mono
+.config/gh
+.config/gtk-2.0
+.config/iterm2
+
 .docsets
 .tmux/plugins
 .tmux/resurrect
@@ -25,8 +29,3 @@ FILES
 .spacemacs.d/.spacemacs.env
 
 .doom.d/config.el
-
-.emacs.d/config.el
-.emacs.d/elpa
-.emacs.d/auto-save-list
-.emacs.d/straight
