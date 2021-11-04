@@ -98,8 +98,60 @@ The font I use is JetBrains' Mono which can be downloaded [[https://www.jetbrain
 
 ** Swift
 #+BEGIN_SRC emacs-lisp
-(after! lsp-mode
-  (setq lsp-sourcekit-executable "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))
+(defvar-local my-swift-mode/eglot-server-platform nil
+  "Platform for the current project, either `:ios' or `:macos'.
+`nil' by default.
+
+This is used to calculate Swift compiler args when starting up a
+SourceKit server through eglot. Note that this is really only
+needed for Xcode projects to work with SourceKit. SPM projects
+work without any extra configuration.")
+
+(defun my-swift-mode/xcrun (&rest args)
+  "Invoke xcrun in a shell with the given ARGS.
+The result is returned as a string."
+  (string-trim (shell-command-to-string (apply #'concat "xcrun" " " args))))
+
+(defun my-swift-mode/sourcekit-args (platform)
+  "Determine Swift compiler args for SourceKit for PLATFORM.
+
+See also `my-swift-mode/eglot-server-platform'."
+  (let* ((show-sdk-path (lambda (sdk-name)
+                          (my-swift-mode:xcrun
+                           "--show-sdk-path --sdk " sdk-name)))
+         (arg-vals
+          (pcase platform
+            ;;TODO: Triples need to be more flexible
+            ;; SDK version can be read something like
+            ;; "x86_64-apple-ios$(xcrun --sdk iphonesimulator --show-sdk-version)-simulator"
+            ;; From https://forums.swift.org/t/sourcekit-lsp-targeting-ios-simulator-seems-to-break-with-xcode-12-2/42191
+            (:ios `(,(funcall show-sdk-path "iphonesimulator")
+                    "x86_64-apple-ios14.2-simulator"))
+            ((or :macos :macosx :osx)
+             `(,(funcall show-sdk-path "macosx")
+               "x86_64-apple-darwin20.1.0"))
+            ;; No args needed for SPM
+            (_ nil))))
+    (when arg-vals
+      `("-Xswiftc" "-sdk"
+        "-Xswiftc" ,(car arg-vals)
+        "-Xswiftc" "-target"
+        "-Xswiftc" ,(cadr arg-vals)))))
+
+(defun my-swift-mode/eglot-server-contact (_ignored)
+  "Construct the list that eglot needs to start sourcekit-lsp.
+
+If `my-swift-mode:eglot-server-platform' is defined, the
+appropriate flags to pass to the Swift compiler for the platform
+will be included in the list."
+  (let ((args (my-swift-mode/sourcekit-args
+               my-swift-mode/eglot-server-platform))
+        (sourcekit-path (my-swift-mode/xcrun "--find sourcekit-lsp")))
+    `(,sourcekit-path ,@args)))
+
+(after! eglot
+  (add-to-list 'eglot-server-programs
+               '(swift-mode . my-swift-mode/eglot-server-contact)))
 #+END_SRC
 
 * Org Mode Settings
@@ -327,3 +379,11 @@ The font I use is JetBrains' Mono which can be downloaded [[https://www.jetbrain
 (after! gcmh
   (setq gcmh-high-cons-threshold 8388608))
 #+END_SRC
+
+#+begin_src emacs-lisp
+(after! flymake
+  (when (and
+         (not (fboundp 'flymake--diag-buffer))
+         (fboundp 'flymake--diag-locus))
+    (defalias 'flymake--diag-buffer 'flymake--diag-locus)))
+#+end_src
