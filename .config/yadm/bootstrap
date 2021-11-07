@@ -23,31 +23,30 @@ if [ "$system_type" = "Darwin" ]; then
 
 fi
 
-# Install Zplug
-
-if ! command -v zplug >/dev/null 2>&1; then
-  echo "Installing zplug"
-  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+# Install Zinit
+if [ ! -d "$HOME/.zinit" ]; then
+  echo "Installing Zinit"
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/master/doc/install.sh)"
 fi
 
 # Configure iTerm2
 
 if [ "$system_type" = "Darwin" ]; then
 
-  if [ -d /Applications/iTerm.app ]; then
+  if [ ! -d /Applications/iTerm.app ]; then
     echo "Installing iTerm2"
     brew install iterm2
   fi
 
-  if [ -d "$HOME/.iterm2" ]; then
+  if [ ! -d "$HOME/.iterm2" ]; then
     echo "Setting iTerm preferences"
     defaults write com.googlecode.iterm2 PrefsCustomFolder "$HOME/.iterm2"
   fi
 fi
 
-# Install Vim plugins
-
-if command -v vim >/dev/null 2>&1; then
-  echo "Bootstrapping Vim"
-  vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
+# Configure Doom Emacs
+if [ ! -d "$HOME/.emacs.d" ]; then
+  echo "Installing Doom"
+  git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
+  doom install
 fi
