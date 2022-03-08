@@ -16,6 +16,10 @@ alias rd='rmdir'
 # Git
 #
 alias gst='git status'
+alias wta='git worktree add'
+alias wtr='git worktree remove'
+alias wtl='git worktree list'
+alias wtp='git worktree prune'
 
 # Applications
 #

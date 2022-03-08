@@ -7,7 +7,7 @@ fpath=(
 
 # Autoload
 autoload colors; colors
-autoload -U compinit; compinit
+autoload -Uz compinit && compinit
 autoload edit-command-line
 zle -N edit-command-line
 
@@ -87,6 +87,12 @@ fi
 
 # SPACESHIP
 SPACESHIP_VI_MODE_SHOW=false
+
+# COMPLETION
+# case insensitive path-completion 
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
+# partial completion suggestions
+zstyle ':completion:*' list-suffixes zstyle ':completion:*' expand prefix suffix
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
