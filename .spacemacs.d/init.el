@@ -96,9 +96,6 @@
 
 (defun dotspacemacs/user-init ()
   (add-to-list 'configuration-layer-elpa-archives '("melpa-stable" . "stable.melpa.org/packages/"))
-  (add-to-list 'package-pinned-packages '(spaceline . "melpa-stable"))
-  (add-to-list 'package-pinned-packages '(spaceline-all-the-icons . "melpa-stable"))
-  (add-to-list 'package-pinned-packages '(all-the-icons . "melpa-stable"))
   (setq custom-file "~/.spacemacs.d/.custom-settings.el")
   (load custom-file)
   )

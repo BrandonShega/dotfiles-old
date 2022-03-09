@@ -74,9 +74,9 @@ The font I use is JetBrains' Mono which can be downloaded [[https://www.jetbrain
 (when IS-MAC
   (setq ns-use-thin-smoothing t
         mac-command-modifier 'meta
-        mac-option-modifier 'super)
-  (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"))
+        mac-option-modifier 'super))
 
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
 #+END_SRC
 
 ** Popup Rules
