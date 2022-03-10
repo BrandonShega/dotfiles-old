@@ -1,3 +1,7 @@
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -31,10 +35,17 @@
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 
+(use-package solaire-mode
+  :ensure t
+  :config
+  (solaire-global-mode 1))
+
 (use-package evil
   :ensure t
   :init (evil-mode 1))
 
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-setup-minibuffer)
+  (which-key-mode))

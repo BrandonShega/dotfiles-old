@@ -1,6 +1,15 @@
 #+TITLE: Config
 
 #+begin_src emacs-lisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+end_src
+
+* Packages
+** General
+*** Straight.el
+#+begin_src emacs-lisp
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -19,6 +28,8 @@
 (setq straight-use-package-by-default t)
 #+end_src
 
+** UI
+*** Doom Modeline
 #+begin_src emacs-lisp
 (use-package doom-modeline
   :ensure t
@@ -27,6 +38,7 @@
 (setq doom-modeline-height 30)
 #+end_src
 
+*** Doom Themes
 #+begin_src emacs-lisp
 (use-package doom-themes
   :ensure t
@@ -38,16 +50,25 @@
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 #+end_src
-
+*** Solaire Mode
+#+begin_src emacs-lisp
+(use-package solaire-mode
+  :ensure t
+  :config
+  (solaire-global-mode 1))
+#+end_src
+** Evil Mode
 #+begin_src emacs-lisp
 (use-package evil
   :ensure t
   :init (evil-mode 1))
 #+end_src
 
+** Which-key
 #+begin_src emacs-lisp
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-setup-minibuffer)
+  (which-key-mode))
 #+end_src
-
