@@ -1,5 +1,3 @@
-(org-babel-load-file "./config.org")
-
 (unless (daemonp)
   (defvar bs--initial-file-name-handler-alist file-name-handler-alist)
   (setq file-name-handler-alist nil)
@@ -19,3 +17,4 @@
 (setq file-name-handler-alist nil
       gc-cons-threshold 100000000)
 
+(org-babel-load-file "./config.org")

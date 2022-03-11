@@ -47,6 +47,65 @@
 
 (show-paren-mode t)
 
+(setq tab-always-indent 'complete)
+
+(set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :height 120)
+
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+
+(defun bs/is-macos ()
+  (eq system-type 'darwin))
+
+(defun bs/is-windows ()
+  (eq system-type 'windows-nt))
+
+(unless (bs/is-windows)
+  (setq-default shell-file-name "/usr/local/bin/zsh")
+  (setq explicit-shell-file-name "/usr/local/bin/zsh"))
+
+(when (bs/is-macos)
+  (setq locate-command "mdfind")
+  (setq ns-use-native-fullscreen t)
+  (setq ns-pop-up-frames nil)
+  (setq mac-redisplay-dont-reset-vscroll t
+        mac-mouse-wheel-smooth-scroll nil)
+  (setq mac-command-modifier 'meta)
+  (setq mac-option-modifier 'super)
+  (setq mac-control-modifier 'control)
+
+  (when (fboundp 'mac-auto-operator-composition-mode)
+    (mac-auto-operator-composition-mode))
+
+  (and (or (daemonp)
+           (display-graphic-p))
+       (require 'ns-auto-titlebar nil t)
+       (ns-auto-titlebar-mode +1))
+
+  (defun bs-init-menu-bar-in-gui-frames-h (&optional frame)
+    (when-let (frame (or frame (selected-frame)))
+      (when (display-graphic-p frame)
+        (set-frame-parameter frame 'menu-bar-lines 1))))
+
+  (add-hook 'window-setup-hook #'bs-init-menu-bar-in-gui-frames-h)
+  (add-hook 'after-make-frame-functions #'bs-init-menu-bar-in-gui-frames-h)
+
+  (use-package ns-auto-titlebar
+    :ensure t
+    :init
+    (and (or (daemonp)
+             (display-graphic-p))
+         (ns-auto-titlebar-mode +1)))
+
+  (use-package osx-trash
+    :ensure t
+    :commands osx-trash-move-file-to-trash
+    :init
+    (setq delete-by-moving-to-trash t)
+    (and (bs/is-macos)
+         (not (fboundp 'system-move-file-to-trash))
+         (defalias #'system-move-file-to-trash #'osx-trash-move-file-to-trash))))
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -84,6 +143,9 @@
   :ensure t
   :config
   (solaire-global-mode 1))
+
+(use-package hl-line-mode
+  :hook ((prog-mode) (text-mode)))
 
 (use-package evil
   :ensure t
