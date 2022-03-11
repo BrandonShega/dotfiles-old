@@ -106,6 +106,8 @@
          (not (fboundp 'system-move-file-to-trash))
          (defalias #'system-move-file-to-trash #'osx-trash-move-file-to-trash))))
 
+
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -123,9 +125,49 @@
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 
+(use-package gcmh
+  :demand
+  :config
+  (gcmh-mode 1))
+
+(use-package helpful
+  :after evil
+  :init
+  (setq evil-lookup-func #'helpful-at-point)
+  :bind
+  ([remap describe-function] . helpful-callable)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-key] . helpful-key))
+
+(use-package eldoc
+  :ensure t
+  :hook (emacs-lisp-mode cider-mode))
+
 (use-package doom-modeline
   :ensure t
-  :init (doom-modeline-mode 1))
+  :hook (doom-modeline-hook . size-indication-mode)
+  :hook (doom-modeline-hook . column-number-mode)
+  :init
+  (unless after-init-time
+    (setq-default mode-line-format nil)
+    (setq projectile-dynamic-mode-line nil)
+    (setq doom-modeline-bar-width 3
+          doom-modeline-github nil
+          doom-modeline-mu4e nil
+          doom-modeline-persp-name nil
+          doom-modeline-minor-modes nil
+          doom-modeline-major-mode-icon nil
+          doom-modeline-buffer-file-name-style 'relative-from-project
+          doom-modeline-buffer-encoding 'nondefault))
+  (when (daemonp)
+    (setq doom-modeline-icon t))
+  :config
+  (defun +modeline-hide-in-non-status-buffers-h ()
+    (if (eq major-mode 'magit-status-mode)
+        (doom-modeline-set-vcs-modeline)
+      (hide-mode-line-mode)))
+  (add-hook 'magit-mode-hook #'+modeline-hide-in-non-status-buffer-h))
 
 (setq doom-modeline-height 30)
 
@@ -145,7 +187,13 @@
   (solaire-global-mode 1))
 
 (use-package hl-line-mode
+  :straight nil
   :hook ((prog-mode) (text-mode)))
+
+(use-package recentf
+  :straight nil
+  :config
+  (add-to-list 'recentf-exclude "\\elpa"))
 
 (use-package evil
   :ensure t
