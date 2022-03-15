@@ -1,3 +1,20 @@
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+(require 'straight)
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+
 (setq inhibit-startup-screen t
       initial-scratch-message nil
       sentence-end-double-space nil
@@ -90,40 +107,16 @@
   (add-hook 'window-setup-hook #'bs-init-menu-bar-in-gui-frames-h)
   (add-hook 'after-make-frame-functions #'bs-init-menu-bar-in-gui-frames-h)
 
-  (use-package ns-auto-titlebar
-    :ensure t
-    :init
-    (and (or (daemonp)
-             (display-graphic-p))
-         (ns-auto-titlebar-mode +1)))
-
-  (use-package osx-trash
-    :ensure t
-    :commands osx-trash-move-file-to-trash
-    :init
-    (setq delete-by-moving-to-trash t)
-    (and (bs/is-macos)
-         (not (fboundp 'system-move-file-to-trash))
-         (defalias #'system-move-file-to-trash #'osx-trash-move-file-to-trash))))
+   (use-package osx-trash
+     :ensure t
+     :commands osx-trash-move-file-to-trash
+     :init
+     (setq delete-by-moving-to-trash t)
+     (and (bs/is-macos)
+          (not (fboundp 'system-move-file-to-trash))
+          (defalias #'system-move-file-to-trash #'osx-trash-move-file-to-trash))))
 
 
-
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-(require 'straight)
-(straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
 
 (use-package gcmh
   :demand
