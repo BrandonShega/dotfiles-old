@@ -74,6 +74,10 @@
 (show-paren-mode t)
 
 (setq tab-always-indent 'complete)
+
+(unless (and (fboundp 'server-running-p)
+             (server-running-p))
+  (server-start))
 #+end_src
 
 ** Font
