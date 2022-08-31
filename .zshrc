@@ -42,8 +42,8 @@ emacs.() {
 
 # default apps
 (( ${+PAGER}   )) || export PAGER='less'
-(( ${+EDITOR}  )) || export EDITOR='emacs'
-export PSQL_EDITOR='emacs'
+(( ${+EDITOR}  )) || export EDITOR='vim'
+export PSQL_EDITOR='vim'
 
 # Aliases
 alias reload='source ~/.zshrc; echo -e "\n\u2699  \e[33mZSH config reloaded\e[0m \u2699"'
@@ -70,6 +70,7 @@ if which swiftenv > /dev/null; then eval "$(swiftenv init -)"; fi # SwiftEnv
 eval `docker-machine env 2>/dev/null` # Docker
 eval "$(pyenv init --path)" # Pyenv
 eval "$(pyenv virtualenv-init -)" #Pyenv VirtualEnv
+. $(brew --prefix asdf)/libexec/asdf.sh
 if [[ -s "$HOME/.asdf/asdf.sh" ]] ; then source "$HOME/.asdf/asdf.sh" ; fi # ASDF
 if [[ -s "$HOME/.asdf/asdf.bash" ]] ; then source "$HOE/asdf/asdf.bash" ; fi # ASDF
 if [[ -s "$HOME/.asdf/completions/asdf.sh" ]] ; then source "$HOME/.asdf/completions/asdf.sh" ; fi # ASDF
@@ -118,7 +119,7 @@ zinit light-mode for \
 ### End of Zinit's installer chunk
 
 # Zinit PLugins
-zinit light spaceship-prompt/spaceship-prompt
+# zinit light spaceship-prompt/spaceship-prompt
 zinit load wfxr/forgit
 zinit load zsh-users/zsh-syntax-highlighting
 zinit load zsh-users/zsh-autosuggestions
@@ -133,3 +134,45 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-rust
 
 ### End of Zinit's installer chunk
+
+# Spaceship Configuration
+SPACESHIP_PROMPT_ORDER=(
+  # time        # Time stamps section (Disabled)
+  user          # Username section
+  dir           # Current directory section
+  host          # Hostname section
+  # git           # Git section (git_branch + git_status)
+  # hg            # Mercurial section (hg_branch  + hg_status)
+  # package     # Package version (Disabled)
+  # node          # Node.js section
+  ruby          # Ruby section
+  # elixir        # Elixir section
+  # xcode       # Xcode section (Disabled)
+  swift         # Swift section
+  # golang        # Go section
+  # php           # PHP section
+  # rust          # Rust section
+  # haskell       # Haskell Stack section
+  # julia       # Julia section (Disabled)
+  # docker      # Docker section (Disabled)
+  # aws           # Amazon Web Services section
+  # gcloud        # Google Cloud Platform section
+  venv          # virtualenv section
+  # conda         # conda virtualenv section
+  pyenv         # Pyenv section
+  # dotnet        # .NET section
+  # ember       # Ember.js section (Disabled)
+  # kubectl       # Kubectl context section
+  # terraform     # Terraform workspace section
+  # ibmcloud      # IBM Cloud section
+  exec_time     # Execution time
+  line_sep      # Line break
+  battery       # Battery level and status
+  # vi_mode     # Vi-mode indicator (Disabled)
+  jobs          # Background jobs indicator
+
+  exit_code     # Exit code section
+  char          # Prompt character
+)
+
+eval "$(starship init zsh)"
