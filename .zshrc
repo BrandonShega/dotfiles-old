@@ -1,14 +1,23 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 fpath=(
   $fpath
   ~/.rvm/scripts/zsh/Completion
   ~/.zsh/functions
   /usr/local/share/zsh/site-functions
+  "$(brew --prefix)/share/zsh/site-functions"
 )
 
 # Autoload
 autoload colors; colors
 autoload -Uz compinit && compinit
 autoload edit-command-line
+autoload -U promptinit; promptinit
 zle -N edit-command-line
 
 # Options
@@ -21,7 +30,7 @@ setopt interactivecomments
 setopt autoparamslash
 setopt autopushd
 setopt correct
-setopt correctall
+setopt nocorrectall
 setopt autocd
 
 # History
@@ -124,6 +133,8 @@ zinit load wfxr/forgit
 zinit load zsh-users/zsh-syntax-highlighting
 zinit load zsh-users/zsh-autosuggestions
 zinit load agkozak/zsh-z
+zinit load marlonrichert/zsh-autocomplete
+zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
@@ -135,44 +146,11 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-# Spaceship Configuration
-SPACESHIP_PROMPT_ORDER=(
-  # time        # Time stamps section (Disabled)
-  user          # Username section
-  dir           # Current directory section
-  host          # Hostname section
-  # git           # Git section (git_branch + git_status)
-  # hg            # Mercurial section (hg_branch  + hg_status)
-  # package     # Package version (Disabled)
-  # node          # Node.js section
-  ruby          # Ruby section
-  # elixir        # Elixir section
-  # xcode       # Xcode section (Disabled)
-  swift         # Swift section
-  # golang        # Go section
-  # php           # PHP section
-  # rust          # Rust section
-  # haskell       # Haskell Stack section
-  # julia       # Julia section (Disabled)
-  # docker      # Docker section (Disabled)
-  # aws           # Amazon Web Services section
-  # gcloud        # Google Cloud Platform section
-  venv          # virtualenv section
-  # conda         # conda virtualenv section
-  pyenv         # Pyenv section
-  # dotnet        # .NET section
-  # ember       # Ember.js section (Disabled)
-  # kubectl       # Kubectl context section
-  # terraform     # Terraform workspace section
-  # ibmcloud      # IBM Cloud section
-  exec_time     # Execution time
-  line_sep      # Line break
-  battery       # Battery level and status
-  # vi_mode     # Vi-mode indicator (Disabled)
-  jobs          # Background jobs indicator
+# prompt pure
 
-  exit_code     # Exit code section
-  char          # Prompt character
-)
+# eval "$(starship init zsh)"
 
-eval "$(starship init zsh)"
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
